@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-03-27 20:02:06
- * @LastEditTime: 2023-03-28 20:09:50
+ * @LastEditTime: 2023-03-28 21:05:00
  * @LastEditors: wsy
  */
 import type { First } from '@/matched/First'
@@ -11,6 +11,8 @@ import type { PopArr } from '@/matched/PopArr'
 import type { StartsWith } from '@/matched/StartsWith'
 import type { Replace, ReplaceDeep } from '@/matched/Replace'
 import type { Trim, TrimLeft, TrimRight } from '@/matched/Trim'
+import type { GetParameters } from '@/matched/GetParameters'
+import type { GetReturnType } from '@/matched/GetReturnType'
 describe('Last', () => {
   test('First', () => {
     expectTypeOf<First<[1, 2, 3]>>().toBeNumber()
@@ -67,5 +69,26 @@ describe('String', () => {
     expectTypeOf<TrimRight<'abc '>>().toEqualTypeOf<'abc'>()
     expectTypeOf<TrimLeft<' abc'>>().toEqualTypeOf<'abc'>()
     expectTypeOf<TrimLeft<'a abc'>>().toEqualTypeOf<'a abc'>()
+  })
+})
+
+describe('Function', () => {
+  test('GetParameters', () => {
+    expectTypeOf<GetParameters<(a: number, b: string) => void>>().toEqualTypeOf<[number, string]>()
+    expectTypeOf<GetParameters<(a: number, b: string) => void>>().not.toEqualTypeOf<[string, number]>()
+    expectTypeOf<GetParameters<() => void>>().toEqualTypeOf<[]>()
+
+    expectTypeOf<Parameters<(a: number, b: string) => void>>().toEqualTypeOf<[number, string]>()
+    expectTypeOf<Parameters<(a: number, b: string) => void>>().not.toEqualTypeOf<[string, number]>()
+    expectTypeOf<Parameters<() => void>>().toEqualTypeOf<[]>()
+  })
+
+  test('GetReturnType', () => {
+    expectTypeOf<GetReturnType<(a: number, b: string) => number>>().toBeNumber()
+    expectTypeOf<GetReturnType<(a: number, b: string) => number>>().not.toBeString()
+    expectTypeOf<GetReturnType<() => void>>().toBeVoid()
+    expectTypeOf<GetReturnType<() => undefined>>().toBeUndefined()
+
+    expectTypeOf<ReturnType<(a: number, b: string) => number>>().toBeNumber()
   })
 })
