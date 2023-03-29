@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-03-27 20:02:06
- * @LastEditTime: 2023-03-29 19:29:40
+ * @LastEditTime: 2023-03-29 19:45:00
  * @LastEditors: wsy
  */
 import type { First } from '@/matched/First'
@@ -98,5 +98,15 @@ describe('Function', () => {
     expectTypeOf<GetThisParameterType<(this: { a: number }) => void>>().toMatchTypeOf<{ a: number }>()
     expectTypeOf<GetThisParameterType<(this: { a: number }) => void>>().not.toMatchTypeOf<{ b: number }>()
     expectTypeOf<GetThisParameterType<() => void>>().toBeUnknown()
+  })
+
+  test('GetInstanceType', () => {
+    class TestClass {
+      a = '1'
+    }
+
+    const a = new TestClass()
+    expectTypeOf<GetInstanceType<typeof TestClass>>().toMatchTypeOf<typeof a>()
+    expectTypeOf<GetInstanceType<typeof TestClass>>().toMatchTypeOf<{ a: string }>()
   })
 })
