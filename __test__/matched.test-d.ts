@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-03-27 20:02:06
- * @LastEditTime: 2023-03-28 21:05:00
+ * @LastEditTime: 2023-03-29 19:29:40
  * @LastEditors: wsy
  */
 import type { First } from '@/matched/First'
@@ -13,6 +13,8 @@ import type { Replace, ReplaceDeep } from '@/matched/Replace'
 import type { Trim, TrimLeft, TrimRight } from '@/matched/Trim'
 import type { GetParameters } from '@/matched/GetParameters'
 import type { GetReturnType } from '@/matched/GetReturnType'
+import type { GetThisParameterType } from '@/matched/GetThisParameterType'
+
 describe('Last', () => {
   test('First', () => {
     expectTypeOf<First<[1, 2, 3]>>().toBeNumber()
@@ -90,5 +92,11 @@ describe('Function', () => {
     expectTypeOf<GetReturnType<() => undefined>>().toBeUndefined()
 
     expectTypeOf<ReturnType<(a: number, b: string) => number>>().toBeNumber()
+  })
+
+  test('GetThisParameterType', () => {
+    expectTypeOf<GetThisParameterType<(this: { a: number }) => void>>().toMatchTypeOf<{ a: number }>()
+    expectTypeOf<GetThisParameterType<(this: { a: number }) => void>>().not.toMatchTypeOf<{ b: number }>()
+    expectTypeOf<GetThisParameterType<() => void>>().toBeUnknown()
   })
 })
