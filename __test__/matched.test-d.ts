@@ -2,7 +2,7 @@
  * @Description:
  * @Author: wsy
  * @Date: 2023-03-27 20:02:06
- * @LastEditTime: 2023-03-29 19:45:00
+ * @LastEditTime: 2023-03-31 18:49:25
  * @LastEditors: wsy
  */
 import type { First } from '@/matched/First'
@@ -14,6 +14,7 @@ import type { Trim, TrimLeft, TrimRight } from '@/matched/Trim'
 import type { GetParameters } from '@/matched/GetParameters'
 import type { GetReturnType } from '@/matched/GetReturnType'
 import type { GetThisParameterType } from '@/matched/GetThisParameterType'
+import type { GetConstructorParameters } from '@/matched/GetConstructorParameters'
 
 describe('Last', () => {
   test('First', () => {
@@ -108,5 +109,15 @@ describe('Function', () => {
     const a = new TestClass()
     expectTypeOf<GetInstanceType<typeof TestClass>>().toMatchTypeOf<typeof a>()
     expectTypeOf<GetInstanceType<typeof TestClass>>().toMatchTypeOf<{ a: string }>()
+  })
+
+  test('GetConstructorParameters', () => {
+    class TestClass {
+      a = '1'
+      constructor(a: string) {}
+    }
+
+    expectTypeOf<GetConstructorParameters<typeof TestClass>>().toEqualTypeOf<[a:string]>()
+    expectTypeOf<GetConstructorParameters<typeof TestClass>>().not.toEqualTypeOf<[]>()
   })
 })
